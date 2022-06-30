@@ -16,5 +16,43 @@ CHIP DMux8Way {
     OUT a, b, c, d, e, f, g, h;
 
     PARTS:
+    Not(in=sel[0], out=nsel0);
+    Not(in=sel[1], out=nsel1);
+    Not(in=sel[2], out=nsel2);
+
+    And(a=nsel0, b=nsel1, out=tmp0);
+    And(a=tmp0, b=nsel2, out=sel20);
+
+    And(a=sel[0], b=nsel1, out=tmp1);
+    And(a=tmp1, b=nsel2, out=sel21);
+
+    And(a=nsel0, b=sel[1], out=tmp2);
+    And(a=tmp2, b=nsel2, out=sel22);
+
+    And(a=sel[0], b=sel[1], out=tmp3);
+    And(a=tmp3, b=nsel2, out=sel23);
+
+    And(a=nsel0, b=nsel1, out=tmp4);
+    And(a=tmp4, b=sel[2], out=sel24);
+
+    And(a=sel[0], b=nsel1, out=tmp5);
+    And(a=tmp5, b=sel[2], out=sel25);
+
+    And(a=nsel0, b=sel[1], out=tmp6);
+    And(a=tmp6, b=sel[2], out=sel26);
+
+    And(a=sel[0], b=sel[1], out=tmp7);
+    And(a=tmp7, b=sel[2], out=sel27);
+
+    
+
+    Mux(a=false, b=in, sel=sel20, out=a);
+    Mux(a=false, b=in, sel=sel21, out=b);
+    Mux(a=false, b=in, sel=sel22, out=c);
+    Mux(a=false, b=in, sel=sel23, out=d);
+    Mux(a=false, b=in, sel=sel24, out=e);
+    Mux(a=false, b=in, sel=sel25, out=f);
+    Mux(a=false, b=in, sel=sel26, out=g);
+    Mux(a=false, b=in, sel=sel27, out=h);
     // Put your code here:
 }

@@ -16,5 +16,19 @@ CHIP DMux4Way {
     OUT a, b, c, d;
 
     PARTS:
+
+    Not(in=sel[0], out=nsel0);
+    Not(in=sel[1], out=nsel1);
+
+    And(a=nsel0, b=nsel1, out=sel20);
+    And(a=sel[0], b=nsel1, out=sel21);
+    And(a=nsel0, b=sel[1], out=sel22);
+    And(a=sel[0], b=sel[1], out=sel23);
+
+
+    Mux(a=false, b=in, sel=sel20, out=a);
+    Mux(a=false, b=in, sel=sel21, out=b);
+    Mux(a=false, b=in, sel=sel22, out=c);
+    Mux(a=false, b=in, sel=sel23, out=d);
     // Put your code here:
 }
