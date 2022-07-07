@@ -34,10 +34,50 @@ CHIP CPU {
                          // the current program (reset==0).
 
     OUT outM[16],        // M value output
-        writeM,          // Write to M? 
+        writeM,          // Write to M? h
         addressM[15],    // Address in data memory (of M)
         pc[15];          // address of next instruction
 
     PARTS:
+    
+    //decode
+    And16(a=instruction, b=true, out[12]=a, out[11]=c1, out[10]=c2, out[9]=c3, out[8]=c4, out[7]=c5, out[6]=c6, out[5]=d1, out[4]=d2, out[3]=d3,  out[2]=j1, out[1]=j2, out[0]=j3 );
+
+
+
+    Mux16(a=instruction, b=outM1, sel=instruction[15], out=aregin);
+
+    Not(in=d1, out=aodernot);
+    Nand(a=aodernot, b=instruction[15], out=aload);
+
+    ARegister(in=aregin, load=aload, out=Aout, out[0..14]=addressM[0..14]);
+    
+    Mux16(a=Aout, b=inM, sel=a, out=AorM);
+
+
+    ALU(x=Dout, y=AorM, zx=c1, nx=c2, zy=c3, ny=c4, f=c5, no=c6, out=outM,out=outM1, zr=zr, ng=ng);
+
+
+
+    And(a=instruction[15], b=d2, out=writed);
+    DRegister(in=outM1, load=writed, out=Dout);
+
+
+    Not(in=zr, out=zrnot);
+    Not(in=ng, out=ngnot);
+    And(a=ngnot, b=zrnot, out=pg);
+    And(a=pg, b=j3, out=jmp1);
+
+    And(a=j2, b=zr, out=jmp2);cj
+    And(a=j1, b=ng, out=jmp3);
+
+    Or8Way(in[0]=jmp1,in[1]=jmp2,in[2]=jmp3,in[3..7]=false, out=ifpc);
+    And(a=ifpc, b=instruction[15], out=writepc);
+
+    PC(in=Aout, load=writepc, inc=true, reset=reset, out[0..14]=pc);
+
     // Put your code here:
+
+    And(a=instruction[15], b=d3, out=writeM);
+
 }
