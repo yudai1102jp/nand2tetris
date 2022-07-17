@@ -13,9 +13,6 @@ def get_path():
 
 
 # %%
-
-
-# %%
 class Parser:
     def __init__(self, path) -> None:
         self.asm_text = []
@@ -189,14 +186,6 @@ class SymbolTable:
 
     def getAddress(self, symbol):
         return self.table[symbol]
-
-# %%
-
-
-# %%
-
-
-# %%
 
 
 # %%
